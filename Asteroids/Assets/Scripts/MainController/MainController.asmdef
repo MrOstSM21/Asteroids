@@ -1,0 +1,17 @@
+{
+    "name": "MainController",
+    "rootNamespace": "",
+    "references": [
+        "GUID:241c012ca1ac5694eb89b5fda8b55ea1",
+        "GUID:3c0650bc80446f34cbd92d71390f4df4"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
