@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Assets.Scripts.View;
 using UnityEngine;
 
 namespace Assets.Scripts.Logic
@@ -11,20 +8,20 @@ namespace Assets.Scripts.Logic
     {
         private const float STEP_SPEED = 1f;
 
-        private Transform _transform;
-        private Vector3 _moveSpeed;
-        private float _maxSpeed;
-        private float _rotationSpeed;
-        private float _maxRotationSpeed;
-        private float _rotationAcceleration;
+        private readonly Transform _transform;
+        private readonly float _maxSpeed;
+        private readonly float _maxRotationSpeed;
+        private readonly float _rotationAcceleration;
 
-        public InertiaHandler(Transform transform, float maxSpeed, float maxRotationSpeed, float rotationAcceleration)
+        private float _rotationSpeed;
+        private Vector3 _moveSpeed;
+
+        public InertiaHandler(Transform transform, Settings shipsettings)
         {
             _transform = transform;
-            _maxSpeed = maxSpeed;
-            _maxRotationSpeed = maxRotationSpeed;
-            _rotationAcceleration = rotationAcceleration;
-
+            _maxSpeed = shipsettings.GetShipMaxSpeed;
+            _maxRotationSpeed = shipsettings.GetShipMaxRotationSpeed;
+            _rotationAcceleration = shipsettings.GetShipRotationAcceleration;
         }
 
         public Vector3 MoveInertia(float input)
@@ -37,10 +34,9 @@ namespace Assets.Scripts.Logic
         }
         public float RotateInertia(float input)
         {
-            _rotationSpeed *= (STEP_SPEED - Time.deltaTime);
+            _rotationSpeed *= (STEP_SPEED - Time.deltaTime * _rotationAcceleration);
             _rotationSpeed = Mathf.Clamp(_rotationSpeed, -_maxRotationSpeed, _maxRotationSpeed);
-            float turnAcceleration = input * _rotationAcceleration;
-            _rotationSpeed += -turnAcceleration * Time.deltaTime;
+            _rotationSpeed += -input;
             return _rotationSpeed;
         }
 

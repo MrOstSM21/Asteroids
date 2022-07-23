@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShipView : MonoBehaviour
+namespace Assets.Scripts.View
 {
-    [SerializeField] Transform _transform;
-    public Transform GetTransform => _transform;
+    public class ShipView : MonoBehaviour
+    {
+        [SerializeField] Transform _transform;
+        public Transform GetTransform => _transform;
 
-    
+    }
 }

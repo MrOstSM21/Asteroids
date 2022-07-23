@@ -18,14 +18,10 @@ public class InputView : MonoBehaviour
         EnterMovement();
         EnterRotation();
     }
-    private void OnEnable() => _playerInput.Enable();
-
-    private void OnDisable() => _playerInput.Disable();
-
+    
     private void EnterMovement()
     {
         var moveForward = _playerInput.Player.Move.ReadValue<float>();
-       
         GetMovement?.Invoke(moveForward);
     }
     private void EnterRotation()
@@ -33,4 +29,7 @@ public class InputView : MonoBehaviour
         var rotation = _playerInput.Player.Rotation.ReadValue<float>();
         GetRotation?.Invoke(rotation);
     }
+    private void OnEnable() => _playerInput.Enable();
+
+    private void OnDisable() => _playerInput.Disable();
 }
