@@ -1,10 +1,20 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyView : MonoBehaviour
+namespace Assets.Scripts.View
 {
-    [SerializeField] Transform _transform;
+    public class EnemyView : MonoBehaviour
+    {
+        public event Action SetMove;
 
-    
+        [SerializeField] Transform _transform;
+
+        public Transform GetTransform => _transform;
+
+        private void Update()
+        {
+            SetMove?.Invoke();
+        }
+    }
 }

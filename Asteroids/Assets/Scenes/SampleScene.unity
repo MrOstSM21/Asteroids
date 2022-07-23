@@ -649,5 +649,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _shipMaxSpeed: 10
   _shipForwardAcceleration: 10
-  _maxRotationSpeed: 180
-  _rotationAcceleration: 200
+  _shipMaxRotationSpeed: 170
+  _shipRotationAcceleration: 1
+  _asteroidSpeed: 0
+  _ufoSpeed: 0
+  _asteroidTimeSpawn: 4
+  _ufoTimeSpawn: 9

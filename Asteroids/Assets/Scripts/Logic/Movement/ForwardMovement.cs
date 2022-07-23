@@ -5,16 +5,16 @@ namespace Assets.Scripts.Logic
 {
     class ForwardMovement : IMovement
     {
-        private Transform _transform;
+        private readonly Transform _transformObject;
 
         public ForwardMovement(Transform transform)
         {
-            _transform = transform;
+            _transformObject = transform;
         }
 
         public void Move(float speed, Vector3 dirrection)
         {
-            _transform.position += dirrection * speed * Time.deltaTime;
+            _transformObject.position += dirrection * speed * Time.deltaTime;
         }
     }
 }

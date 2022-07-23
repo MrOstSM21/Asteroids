@@ -8,21 +8,24 @@ public enum EnemyName
     AsteroidPart,
     Ufo
 }
-public class GameView : MonoBehaviour
+namespace Assets.Scripts.View
 {
-    [SerializeField] private ShipView _shipView;
-    [SerializeField] private EnemyView _asteroid;
-    [SerializeField] private EnemyView _asteroidPart;
-    [SerializeField] private EnemyView _ufo;
-    [SerializeField] private InputView _inputView;
-
-    public ShipView GetShipView => _shipView;
-    public InputView GetInputView => _inputView;
-
-    public Dictionary<EnemyName, EnemyView> GetEnemysView() => new()
+    public class GameView : MonoBehaviour
     {
-        { EnemyName.Asteroid, _asteroid },
-        { EnemyName.AsteroidPart, _asteroidPart },
-        { EnemyName.Ufo, _ufo },
-    };
+        [SerializeField] private ShipView _shipView;
+        [SerializeField] private EnemyView _asteroid;
+        [SerializeField] private EnemyView _asteroidPart;
+        [SerializeField] private EnemyView _ufo;
+        [SerializeField] private InputView _inputView;
+
+        public ShipView GetShipView => _shipView;
+        public InputView GetInputView => _inputView;
+
+        public Dictionary<EnemyName, EnemyView> GetEnemysView() => new()
+        {
+            { EnemyName.Asteroid, _asteroid },
+            { EnemyName.AsteroidPart, _asteroidPart },
+            { EnemyName.Ufo, _ufo },
+        };
+    }
 }
