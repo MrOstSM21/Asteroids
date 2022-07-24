@@ -9,24 +9,28 @@ namespace Assets.Scripts.Logic
         private readonly ShipView _shipView;
         private readonly Settings _settings;
         private readonly InputView _inputView;
+        private readonly VisibilityHandler _visibilityHandler;
 
         private InertiaHandler _inertiaHandler;
         private IMovement _movement;
 
-        public Ship(ShipView shipView, Settings settings, InputView inputView)
+        public Ship(GameView gameView, Settings settings)
         {
-            _shipView = shipView;
+            _shipView = gameView.GetShipView;
             _settings = settings;
-            _inputView = inputView;
+            _inputView = gameView.GetInputView;
             _movement = new ForwardMovement(_shipView.GetTransform);
             _inertiaHandler = new InertiaHandler(_shipView.GetTransform, _settings);
+            _visibilityHandler = new VisibilityHandler(gameView.GetMainCamera, _shipView.GetTransform);
             Subscribe();
 
         }
         private void Move(float movement)
         {
+            _visibilityHandler.CheckVisibility();
             var direction = _inertiaHandler.MoveInertia(movement);
             _movement.Move(_settings.GetShipForwardAcceleration, direction);
+           
         }
         private void Rotate(float rotation)
         {

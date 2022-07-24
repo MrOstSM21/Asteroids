@@ -12,15 +12,15 @@ namespace Assets.Scripts.Logic
     {
         private readonly EnemyView _enemyView;
         private readonly Settings _settings;
-        private readonly Vector3 _direction;
-        
+        private readonly GameView _gameView;
+
         private IMovement _movement;
 
-        public Ufo(EnemyView enemyView, Settings settings, Vector3 direction)
+        public Ufo(EnemyView enemyView, Settings settings, GameView gameView)
         {
             _enemyView = enemyView;
             _settings = settings;
-            _direction = direction;
+            _gameView = gameView;
             _movement = new MovementInTarget(_enemyView.GetTransform);
         }
 
@@ -31,7 +31,8 @@ namespace Assets.Scripts.Logic
 
         private void _enemyView_SetMove()
         {
-            _movement.Move(_settings.GetUfoSpeed,_direction);
+            var direction = _gameView.GetShipView.GetTransform.position;
+            _movement.Move(_settings.GetUfoSpeed, direction);
         }
     }
 }
