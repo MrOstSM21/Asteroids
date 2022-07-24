@@ -15,15 +15,11 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        _ship = new Ship(_gameView.GetShipView, _settings, _gameView.GetInputView);
-        _createHandler = new EnemyCreateHandler(_settings, _gameView.GetShipView, _gameView.GetEnemysView());
+        _ship = new Ship(_gameView, _settings);
+        _createHandler = new EnemyCreateHandler(_settings, _gameView);
         StartCoroutine(GameTimer());
     }
-    private void Update()
-    {
-
-    }
-
+    
     IEnumerator GameTimer()
     {
         while (true)

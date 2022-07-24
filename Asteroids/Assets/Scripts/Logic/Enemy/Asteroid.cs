@@ -19,7 +19,7 @@ namespace Assets.Scripts.Logic
         {
             _enemyView = enemyView;
             _settings = settings;
-            _direction = direction;
+            _direction = direction-_enemyView.GetTransform.position;
             _movement = new ForwardMovement(_enemyView.GetTransform);
         }
 
@@ -30,7 +30,7 @@ namespace Assets.Scripts.Logic
 
         private void _enemyView_SetMove()
         {
-            _movement.Move(_settings.GetAsteroidSpeed, _direction);
+            _movement.Move(_settings.GetAsteroidSpeed, _direction.normalized);
         }
     }
 }

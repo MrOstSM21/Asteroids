@@ -17,7 +17,7 @@ namespace Assets.Scripts.Logic
 
         public void Move(float speed, Vector3 targetPosition)
         {
-            _transformObject.position = Vector3.MoveTowards(_transformObject.position, targetPosition, speed);
+            _transformObject.position = Vector3.MoveTowards(_transformObject.position, targetPosition, speed * Time.deltaTime);
         }
     }
 }

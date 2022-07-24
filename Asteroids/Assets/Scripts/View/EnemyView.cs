@@ -15,6 +15,7 @@ namespace Assets.Scripts.View
         private void Update()
         {
             SetMove?.Invoke();
+            
         }
     }
 }
