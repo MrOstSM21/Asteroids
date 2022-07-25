@@ -19,11 +19,17 @@ namespace Assets.Scripts.View
         [SerializeField] private InputView _inputView;
         [SerializeField] private Transform[] _spawnPointsView;
         [SerializeField] private Camera _maincamera;
+        [SerializeField] private Transform _containerPoolBullet;
+        [SerializeField] private BulletView _bulletView;
+        [SerializeField] private Transform _weaponSpawnPoint;
 
         public ShipView GetShipView => _shipView;
         public InputView GetInputView => _inputView;
         public Transform[] GetSpawnPointsView => _spawnPointsView;
         public Camera GetMainCamera => _maincamera;
+        public Transform GetContainerPoolBullet => _containerPoolBullet;
+        public BulletView GetBulletView => _bulletView;
+        public Transform GetWeaponSpawnPoint => _weaponSpawnPoint;
 
         public Dictionary<EnemyName, EnemyView> GetEnemysView() => new()
         {

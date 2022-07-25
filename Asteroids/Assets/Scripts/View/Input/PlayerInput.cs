@@ -46,9 +46,18 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Shoot"",
+                    ""name"": ""ShootBullet"",
                     ""type"": ""Button"",
                     ""id"": ""fb8bf07e-8b5c-419a-af99-f23cae79c037"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShootLaser"",
+                    ""type"": ""Button"",
+                    ""id"": ""0e9b03be-40b9-4f4d-9e68-f4ef6d521ff4"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -107,18 +116,18 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Shoot"",
+                    ""action"": ""ShootBullet"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""fb98d25f-4940-4083-833b-afc84f6338bb"",
+                    ""id"": ""8b7fe1fe-81a0-48ba-95d1-73310b601287"",
                     ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Shoot"",
+                    ""action"": ""ShootLaser"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -131,7 +140,8 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Rotation = m_Player.FindAction("Rotation", throwIfNotFound: true);
-        m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
+        m_Player_ShootBullet = m_Player.FindAction("ShootBullet", throwIfNotFound: true);
+        m_Player_ShootLaser = m_Player.FindAction("ShootLaser", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -193,14 +203,16 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Rotation;
-    private readonly InputAction m_Player_Shoot;
+    private readonly InputAction m_Player_ShootBullet;
+    private readonly InputAction m_Player_ShootLaser;
     public struct PlayerActions
     {
         private @PlayerInput m_Wrapper;
         public PlayerActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Rotation => m_Wrapper.m_Player_Rotation;
-        public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
+        public InputAction @ShootBullet => m_Wrapper.m_Player_ShootBullet;
+        public InputAction @ShootLaser => m_Wrapper.m_Player_ShootLaser;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -216,9 +228,12 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Rotation.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotation;
                 @Rotation.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotation;
                 @Rotation.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotation;
-                @Shoot.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
-                @Shoot.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
-                @Shoot.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
+                @ShootBullet.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootBullet;
+                @ShootBullet.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootBullet;
+                @ShootBullet.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootBullet;
+                @ShootLaser.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootLaser;
+                @ShootLaser.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootLaser;
+                @ShootLaser.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootLaser;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -229,9 +244,12 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Rotation.started += instance.OnRotation;
                 @Rotation.performed += instance.OnRotation;
                 @Rotation.canceled += instance.OnRotation;
-                @Shoot.started += instance.OnShoot;
-                @Shoot.performed += instance.OnShoot;
-                @Shoot.canceled += instance.OnShoot;
+                @ShootBullet.started += instance.OnShootBullet;
+                @ShootBullet.performed += instance.OnShootBullet;
+                @ShootBullet.canceled += instance.OnShootBullet;
+                @ShootLaser.started += instance.OnShootLaser;
+                @ShootLaser.performed += instance.OnShootLaser;
+                @ShootLaser.canceled += instance.OnShootLaser;
             }
         }
     }
@@ -240,6 +258,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnRotation(InputAction.CallbackContext context);
-        void OnShoot(InputAction.CallbackContext context);
+        void OnShootBullet(InputAction.CallbackContext context);
+        void OnShootLaser(InputAction.CallbackContext context);
     }
 }
