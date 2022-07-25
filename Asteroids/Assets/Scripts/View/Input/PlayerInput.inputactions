@@ -24,9 +24,18 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Shoot",
+                    "name": "ShootBullet",
                     "type": "Button",
                     "id": "fb8bf07e-8b5c-419a-af99-f23cae79c037",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ShootLaser",
+                    "type": "Button",
+                    "id": "0e9b03be-40b9-4f4d-9e68-f4ef6d521ff4",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -85,18 +94,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Shoot",
+                    "action": "ShootBullet",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "fb98d25f-4940-4083-833b-afc84f6338bb",
+                    "id": "8b7fe1fe-81a0-48ba-95d1-73310b601287",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Shoot",
+                    "action": "ShootLaser",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -6,6 +6,7 @@ public class InputView : MonoBehaviour
 {
     public event Action<float> GetMovement;
     public event Action<float> GetRotation;
+    public event Action GetShootBullet;
 
     private PlayerInput _playerInput;
     private void Awake()
@@ -17,6 +18,7 @@ public class InputView : MonoBehaviour
     {
         EnterMovement();
         EnterRotation();
+        EnterShootBullet();
     }
     
     private void EnterMovement()
@@ -28,6 +30,14 @@ public class InputView : MonoBehaviour
     {
         var rotation = _playerInput.Player.Rotation.ReadValue<float>();
         GetRotation?.Invoke(rotation);
+    }
+    private void EnterShootBullet()
+    {
+        var shootBullet = _playerInput.Player.ShootBullet.ReadValue<float>();
+        if (shootBullet!=0)
+        {
+            GetShootBullet?.Invoke();
+        }
     }
     private void OnEnable() => _playerInput.Enable();
 
