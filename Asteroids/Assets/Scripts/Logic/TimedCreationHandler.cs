@@ -4,7 +4,7 @@ using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Logic
 {
-    public class EnemyCreateHandler
+    public class TimedCreationHandler
     {
         private const float DISTANCE_CAMERA_Z = 10f;
 
@@ -15,7 +15,7 @@ namespace Assets.Scripts.Logic
 
         private int _time;
 
-        public EnemyCreateHandler(Settings settings, GameView gameView, Score score)
+        public TimedCreationHandler(Settings settings, GameView gameView, Score score)
         {
             _gameView = gameView;
             _spawnPoints = _gameView.GetSpawnPointsView;

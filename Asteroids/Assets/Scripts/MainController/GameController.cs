@@ -10,14 +10,14 @@ public class GameController : MonoBehaviour
     [SerializeField] private Settings _settings;
 
     private Ship _ship;
-    private EnemyCreateHandler _createHandler;
+    private TimedCreationHandler _createHandler;
     private Score _score;
 
     private void Start()
     {
         _ship = new Ship(_gameView, _settings);
         _score = new Score(_gameView.GetScoreView);
-        _createHandler = new EnemyCreateHandler(_settings, _gameView, _score);
+        _createHandler = new TimedCreationHandler(_settings, _gameView, _score);
         StartCoroutine(GameTimer());
         _ship.EndGame += EndGame;
         Time.timeScale = 1;

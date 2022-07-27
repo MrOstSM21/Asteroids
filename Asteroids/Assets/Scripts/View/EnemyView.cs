@@ -13,9 +13,7 @@ namespace Assets.Scripts.View
         public Transform GetTransform => _transform;
 
         [SerializeField] private Transform _transform;
-
-        private int _points;
-                
+                                
         private void Update()
         {
             SetMove?.Invoke();
@@ -25,8 +23,7 @@ namespace Assets.Scripts.View
         {
             CollisionEnter?.Invoke(collision);
         }
-        public void Init(int points) => _points = points;
-       
+              
         public void Destroy() => Destroy(gameObject);
 
         public void TakeDamage()
