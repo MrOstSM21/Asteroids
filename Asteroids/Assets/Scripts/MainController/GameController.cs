@@ -1,9 +1,8 @@
 using Assets.Scripts.Logic;
 using Assets.Scripts.View;
 using UnityEngine;
-using System;
-using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -12,14 +11,18 @@ public class GameController : MonoBehaviour
 
     private Ship _ship;
     private EnemyCreateHandler _createHandler;
+    private Score _score;
 
     private void Start()
     {
         _ship = new Ship(_gameView, _settings);
-        _createHandler = new EnemyCreateHandler(_settings, _gameView);
+        _score = new Score(_gameView.GetScoreView);
+        _createHandler = new EnemyCreateHandler(_settings, _gameView, _score);
         StartCoroutine(GameTimer());
+        _ship.EndGame += EndGame;
+        Time.timeScale = 1;
     }
-    
+
     IEnumerator GameTimer()
     {
         while (true)
@@ -27,5 +30,14 @@ public class GameController : MonoBehaviour
             _createHandler.Init();
             yield return new WaitForSeconds(1);
         }
+    }
+
+    public void ReloadGame() => SceneManager.LoadScene(0);
+
+    private void EndGame()
+    {
+        _gameView.GetEndScoreView.SetScore(_score.GetScore);
+        _gameView.GetEndPanel.SetActive(true);
+        Time.timeScale = 0;
     }
 }

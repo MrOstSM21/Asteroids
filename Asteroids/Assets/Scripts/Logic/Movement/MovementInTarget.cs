@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Scripts.Logic
 {
@@ -15,9 +10,7 @@ namespace Assets.Scripts.Logic
             _transformObject = transform;
         }
 
-        public void Move(float speed, Vector3 targetPosition)
-        {
-            _transformObject.position = Vector3.MoveTowards(_transformObject.position, targetPosition, speed * Time.deltaTime);
-        }
+        public void Move(float speed, Vector3 targetPosition) =>
+                    _transformObject.position = Vector3.MoveTowards(_transformObject.position, targetPosition, speed * Time.deltaTime);
     }
 }

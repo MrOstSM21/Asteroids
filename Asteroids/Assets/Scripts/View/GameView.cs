@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,16 +19,25 @@ namespace Assets.Scripts.View
         [SerializeField] private Transform[] _spawnPointsView;
         [SerializeField] private Camera _maincamera;
         [SerializeField] private Transform _containerPoolBullet;
-        [SerializeField] private BulletView _bulletView;
+        [SerializeField] private WeaponView _weaponView;
         [SerializeField] private Transform _weaponSpawnPoint;
+        [SerializeField] private ShipIndicatorsView _shipIndicatorsView;
+        [SerializeField] private ScoreView _scoreView;
+        [SerializeField] private ScoreView _endScoreView;
+        [SerializeField] private GameObject _endPanel;
 
         public ShipView GetShipView => _shipView;
         public InputView GetInputView => _inputView;
         public Transform[] GetSpawnPointsView => _spawnPointsView;
         public Camera GetMainCamera => _maincamera;
         public Transform GetContainerPoolBullet => _containerPoolBullet;
-        public BulletView GetBulletView => _bulletView;
+        public WeaponView GetWeaponView => _weaponView;
         public Transform GetWeaponSpawnPoint => _weaponSpawnPoint;
+        public ShipIndicatorsView GetShipIndicators => _shipIndicatorsView;
+        public ScoreView GetScoreView => _scoreView;
+        public ScoreView GetEndScoreView => _endScoreView;
+        public GameObject GetEndPanel => _endPanel;
+
 
         public Dictionary<EnemyName, EnemyView> GetEnemysView() => new()
         {

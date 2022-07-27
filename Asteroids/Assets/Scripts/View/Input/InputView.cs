@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InputView : MonoBehaviour
@@ -7,13 +6,15 @@ public class InputView : MonoBehaviour
     public event Action<float> GetMovement;
     public event Action<float> GetRotation;
     public event Action GetShootBullet;
+    public event Action GetShootLaser;
 
     private PlayerInput _playerInput;
     private void Awake()
     {
         _playerInput = new PlayerInput();
-
+        _playerInput.Player.ShootLaser.performed += ShootLaser;
     }
+
     private void Update()
     {
         EnterMovement();
@@ -39,6 +40,8 @@ public class InputView : MonoBehaviour
             GetShootBullet?.Invoke();
         }
     }
+    private void ShootLaser(UnityEngine.InputSystem.InputAction.CallbackContext obj) => GetShootLaser?.Invoke();
+
     private void OnEnable() => _playerInput.Enable();
 
     private void OnDisable() => _playerInput.Disable();

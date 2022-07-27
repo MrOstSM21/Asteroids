@@ -1,46 +1,42 @@
 ﻿using Assets.Scripts.View;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Scripts.Logic
 {
+
     public class Bullet : IWeapon
     {
-        public Transform GetTransform => _bulletView.GetTransform;
+        public Transform GetTransform => _weaponView.GetTransform;
 
-        private readonly BulletView _bulletView;
+        private readonly WeaponView _weaponView;
         private readonly Settings _settings;
         private readonly VisibilityHandler _visibilityHandler;
         private readonly Camera _camera;
+        private readonly IMovement _movement;
+        private readonly ICollisionHandler _collisionHandler;
 
-        //private ShipView _shipView;
         private Vector3 _direction;
-        private IMovement _movement;
 
-        public Bullet(BulletView bulletView, Settings settings,Camera camera)
+        public Bullet(WeaponView weaponView, Settings settings, Camera camera)
         {
             _camera = camera;
-            _bulletView = bulletView;
+            _weaponView = weaponView;
             _settings = settings;
-            _visibilityHandler = new VisibilityHandler( _bulletView.GetTransform);
-
-            _movement = new ForwardMovement(_bulletView.GetTransform);
+            _visibilityHandler = new VisibilityHandler(_weaponView.GetTransform);
+            _collisionHandler = new CollisionHandlerWithEnemy();
+            _movement = new ForwardMovement(_weaponView.GetTransform);
         }
 
         public void Shoot(Transform weaponSpawnPoint)
         {
-            //_shipView = shipView;
             SetStartParameter(weaponSpawnPoint);
             Subscribe();
         }
         public void LeftTheZone() => ReturnInPool();
+
         private void ReturnInPool()
         {
-            _bulletView.GetTransform.gameObject.SetActive(false);
+            _weaponView.GetTransform.gameObject.SetActive(false);
             Unsubscribe();
         }
 
@@ -48,16 +44,34 @@ namespace Assets.Scripts.Logic
         {
             _direction = weaponSpawnPoint.transform.up;
             var positionY = weaponSpawnPoint.position.y;
-            _bulletView.GetTransform.position = new Vector3(weaponSpawnPoint.position.x, positionY, 0f);
-            _bulletView.GetTransform.rotation = weaponSpawnPoint.rotation;
+            _weaponView.GetTransform.position = new Vector3(weaponSpawnPoint.position.x, positionY, 0f);
+            _weaponView.GetTransform.rotation = weaponSpawnPoint.rotation;
         }
-        private void Subscribe() => _bulletView.SetMove += _bulletView_SetMove;
-        private void Unsubscribe() => _bulletView.SetMove -= _bulletView_SetMove;
-        private void _bulletView_SetMove()
+        private void Update()
         {
-            _visibilityHandler.CheckVisibilityPlayerObjects(this,_camera);
+            _visibilityHandler.CheckVisibilityPlayerObjects(this, _camera);
             _movement.Move(_settings.GetBulletSpeed, _direction);
         }
 
+        private void CollisionEnter(Collision2D collision)
+        {
+            var enemy = _collisionHandler.CheckCollision(collision);
+            if (enemy)
+            {
+                ReturnInPool();
+            }
+        }
+
+        private void Subscribe()
+        {
+            _weaponView.CollisionEnter += CollisionEnter;
+            _weaponView.WeaponUpdate += Update;
+        }
+
+        private void Unsubscribe()
+        {
+            _weaponView.WeaponUpdate -= Update;
+            _weaponView.CollisionEnter -= CollisionEnter;
+        }
     }
 }
