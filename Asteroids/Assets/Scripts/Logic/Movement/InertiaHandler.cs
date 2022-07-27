@@ -30,6 +30,7 @@ namespace Assets.Scripts.Logic
             _moveSpeed = Vector3.ClampMagnitude(_moveSpeed, _maxSpeed);
             var acceleration = input * _transform.up;
             _moveSpeed += acceleration * Time.deltaTime;
+
             return _moveSpeed;
         }
         public float RotateInertia(float input)
@@ -37,8 +38,8 @@ namespace Assets.Scripts.Logic
             _rotationSpeed *= (STEP_SPEED - Time.deltaTime * _rotationAcceleration);
             _rotationSpeed = Mathf.Clamp(_rotationSpeed, -_maxRotationSpeed, _maxRotationSpeed);
             _rotationSpeed += -input;
+
             return _rotationSpeed;
         }
-
     }
 }

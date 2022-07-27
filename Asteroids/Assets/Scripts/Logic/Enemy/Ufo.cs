@@ -1,9 +1,5 @@
 ﻿using Assets.Scripts.View;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Scripts.Logic
@@ -14,34 +10,62 @@ namespace Assets.Scripts.Logic
         private readonly Settings _settings;
         private readonly GameView _gameView;
         private readonly VisibilityHandler _visibilityHandler;
+        private readonly Score _score;
+        private readonly IMovement _movement;
+        private readonly ICollisionHandler _collisionHandler;
+        private readonly Dictionary<EnemyName, int> _enemyPoints;
 
-        private IMovement _movement;
-
-        public Ufo(EnemyView enemyView, Settings settings, GameView gameView)
+        public Ufo(EnemyView enemyView, Settings settings, GameView gameView, Score score)
         {
             _enemyView = enemyView;
             _settings = settings;
             _gameView = gameView;
+            _score = score;
+            _enemyPoints = _settings.GetEnemyPoints();
             _visibilityHandler = new VisibilityHandler(_enemyView.GetTransform);
             _movement = new MovementInTarget(_enemyView.GetTransform);
+            _collisionHandler = new CollisionHandlerWithWeapon();
+            Subscribe();
         }
 
-        public void Move() => Subscribe();
+        public void Move() => _enemyView.SetMove += SetMove;
+
         public void LeftTheZone()
         {
-            _enemyView.DestroyEnemy();
+            _enemyView.Destroy();
             Unsubscribe();
         }
-      
 
-        private void Subscribe() => _enemyView.SetMove += _enemyView_SetMove;
-        private void Unsubscribe() => _enemyView.SetMove -= _enemyView_SetMove;
-
-        private void _enemyView_SetMove()
+        private void SetMove()
         {
             _visibilityHandler.CheckVisibilityEnemy(this, _settings.GetEndZoneDistanse);
             var direction = _gameView.GetShipView.GetTransform.position;
             _movement.Move(_settings.GetUfoSpeed, direction);
+        }
+
+        private void CollisionEnter(Collision2D collision)
+        {
+            var weapon = _collisionHandler.CheckCollision(collision);
+            if (weapon)
+            {
+                _enemyView.TakeDamage();
+                Unsubscribe();
+            }
+        }
+
+        private void GetDamage() => _score.AddPoint(_enemyPoints[EnemyName.Ufo]);
+
+        private void Subscribe()
+        {
+            _enemyView.CollisionEnter += CollisionEnter;
+            _enemyView.GetDamage += GetDamage;
+        }
+
+        private void Unsubscribe()
+        {
+            _enemyView.CollisionEnter -= CollisionEnter;
+            _enemyView.SetMove -= SetMove;
+            _enemyView.GetDamage -= GetDamage;
         }
     }
 }

@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Scripts.Logic
 {
-  
+
     class VisibilityHandler
     {
-        private Transform _transform;
+        private readonly Transform _transform;
 
         public VisibilityHandler(Transform transform)
         {
-
             _transform = transform;
         }
 
@@ -30,31 +24,30 @@ namespace Assets.Scripts.Logic
                     position.x = -position.x;
                     _transform.position = position;
                 }
+
                 if (entity is Bullet bullet)
                 {
                     bullet.LeftTheZone();
                 }
-
             }
             if (screenPosition.y < 0 || screenPosition.y > 1)
             {
-
                 if (entity is Ship)
                 {
                     position.y = -position.y;
                     _transform.position = position;
                 }
+
                 if (entity is Bullet bullet)
                 {
                     bullet.LeftTheZone();
                 }
-
             }
         }
-        public void CheckVisibilityEnemy(IEnemy enemy,float endZoneDistance)
+        public void CheckVisibilityEnemy(IEnemy enemy, float endZoneDistance)
         {
             var position = _transform.position;
-            if (position.x<-endZoneDistance||position.x>endZoneDistance|| position.y < -endZoneDistance || position.y > endZoneDistance)
+            if (position.x < -endZoneDistance || position.x > endZoneDistance || position.y < -endZoneDistance || position.y > endZoneDistance)
             {
                 enemy.LeftTheZone();
             }

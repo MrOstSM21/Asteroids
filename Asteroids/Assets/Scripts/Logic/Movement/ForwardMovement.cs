@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Scripts.Logic
 {
@@ -12,9 +11,6 @@ namespace Assets.Scripts.Logic
             _transformObject = transform;
         }
 
-        public void Move(float speed, Vector3 dirrection)
-        {
-            _transformObject.position += dirrection * speed * Time.deltaTime;
-        }
+        public void Move(float speed, Vector3 dirrection) => _transformObject.position += dirrection * speed * Time.deltaTime;
     }
 }

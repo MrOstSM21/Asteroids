@@ -3,20 +3,18 @@ using UnityEngine;
 
 namespace Assets.Scripts.View
 {
-    public class ShipView : MonoBehaviour
+    public class WeaponView : MonoBehaviour
     {
-        public event Action ShipUpdate;
+        public event Action WeaponUpdate;
         public event Action<Collision2D> CollisionEnter;
 
         [SerializeField] private Transform _transform;
-        [SerializeField] private Animator _animator;
 
         public Transform GetTransform => _transform;
-        public Animator GetAnimator => _animator;
 
         private void Update()
         {
-            ShipUpdate?.Invoke();
+            WeaponUpdate?.Invoke();
         }
         private void OnCollisionEnter2D(Collision2D collision)
         {
