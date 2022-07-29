@@ -14,14 +14,16 @@ namespace Assets.Scripts.Logic
         private readonly Camera _camera;
         private readonly IMovement _movement;
         private readonly ICollisionHandler _collisionHandler;
+        private readonly UpdateHandler _updateHandler;
 
         private Vector3 _direction;
 
-        public Bullet(WeaponView weaponView, Settings settings, Camera camera)
+        public Bullet(WeaponView weaponView, Settings settings, Camera camera, UpdateHandler updateHandler)
         {
             _camera = camera;
             _weaponView = weaponView;
             _settings = settings;
+            _updateHandler = updateHandler;
             _visibilityHandler = new VisibilityHandler(_weaponView.GetTransform);
             _collisionHandler = new CollisionHandlerWithEnemy();
             _movement = new ForwardMovement(_weaponView.GetTransform);
@@ -65,12 +67,12 @@ namespace Assets.Scripts.Logic
         private void Subscribe()
         {
             _weaponView.CollisionEnter += CollisionEnter;
-            _weaponView.WeaponUpdate += Update;
+            _updateHandler.Update += Update;
         }
 
         private void Unsubscribe()
         {
-            _weaponView.WeaponUpdate -= Update;
+            _updateHandler.Update -= Update;
             _weaponView.CollisionEnter -= CollisionEnter;
         }
     }

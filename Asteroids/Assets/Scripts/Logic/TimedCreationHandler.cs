@@ -12,15 +12,17 @@ namespace Assets.Scripts.Logic
         private readonly GameView _gameView;
         private readonly Transform[] _spawnPoints;
         private readonly Score _score;
+        private readonly UpdateHandler _updateHandler;
 
         private int _time;
 
-        public TimedCreationHandler(Settings settings, GameView gameView, Score score)
+        public TimedCreationHandler(Settings settings, GameView gameView, Score score,UpdateHandler updateHandler)
         {
             _gameView = gameView;
             _spawnPoints = _gameView.GetSpawnPointsView;
             _score = score;
             _settings = settings;
+            _updateHandler = updateHandler;
         }
 
         public void Init()
@@ -38,7 +40,7 @@ namespace Assets.Scripts.Logic
 
         private void CreateEnemy(EnemyName enemyName, Vector3 position)
         {
-            var factory = new Factory(_settings, _gameView);
+            var factory = new Factory(_settings, _gameView,_updateHandler);
             IEnemy enemy = factory.Create(enemyName, position, GetDirection(), _score);
             enemy?.Move();
         }

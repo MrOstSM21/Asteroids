@@ -5,7 +5,6 @@ namespace Assets.Scripts.View
 {
     public class ShipView : MonoBehaviour
     {
-        public event Action ShipUpdate;
         public event Action<Collision2D> CollisionEnter;
 
         [SerializeField] private Transform _transform;
@@ -14,10 +13,7 @@ namespace Assets.Scripts.View
         public Transform GetTransform => _transform;
         public Animator GetAnimator => _animator;
 
-        private void Update()
-        {
-            ShipUpdate?.Invoke();
-        }
+
         private void OnCollisionEnter2D(Collision2D collision)
         {
             CollisionEnter?.Invoke(collision);

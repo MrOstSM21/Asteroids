@@ -12,17 +12,23 @@ public class GameController : MonoBehaviour
     private Ship _ship;
     private TimedCreationHandler _createHandler;
     private Score _score;
+    private UpdateHandler _updateHandler;
 
     private void Start()
     {
-        _ship = new Ship(_gameView, _settings);
+        _updateHandler = new UpdateHandler();
+        _ship = new Ship(_gameView, _settings,_updateHandler);
         _score = new Score(_gameView.GetScoreView);
-        _createHandler = new TimedCreationHandler(_settings, _gameView, _score);
+        _createHandler = new TimedCreationHandler(_settings, _gameView, _score,_updateHandler);
         StartCoroutine(GameTimer());
         _ship.EndGame += EndGame;
         Time.timeScale = 1;
     }
 
+    private void Update()
+    {
+        _updateHandler.Init();
+    }
     IEnumerator GameTimer()
     {
         while (true)

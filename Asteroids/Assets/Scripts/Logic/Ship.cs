@@ -19,11 +19,13 @@ namespace Assets.Scripts.Logic
         private readonly IMovement _movement;
         private readonly PoolBullets _poolBullets;
         private readonly IWeapon _laser;
+        private readonly UpdateHandler _updateHandler;
 
         private float _speed;
 
-        public Ship(GameView gameView, Settings settings)
+        public Ship(GameView gameView, Settings settings,UpdateHandler updateHandler)
         {
+            _updateHandler = updateHandler;
             _gameView = gameView;
             _shipView = _gameView.GetShipView;
             _shipIndicatorsView = _gameView.GetShipIndicators;
@@ -32,7 +34,7 @@ namespace Assets.Scripts.Logic
             _movement = new ForwardMovement(_shipView.GetTransform);
             _inertiaHandler = new InertiaHandler(_shipView.GetTransform, _settings);
             _visibilityHandler = new VisibilityHandler(_shipView.GetTransform);
-            _poolBullets = new PoolBullets(gameView.GetContainerPoolBullet, _gameView.GetWeaponView, _settings, gameView);
+            _poolBullets = new PoolBullets(gameView.GetContainerPoolBullet, _gameView.GetWeaponView, _settings, gameView,_updateHandler);
             _laser = new Laser(_shipView.GetAnimator);
             _collisionHandler = new CollisionHandlerWithEnemy();
             Subscribe();
@@ -88,7 +90,7 @@ namespace Assets.Scripts.Logic
             _inputView.GetRotation += GetRotation;
             _inputView.GetShootBullet += GetShootBullet;
             _inputView.GetShootLaser += GetShootLaser;
-            _shipView.ShipUpdate += ShipUpdate;
+            _updateHandler.Update += ShipUpdate;
             _shipView.CollisionEnter += CollisionEnter;
         }
 
@@ -98,7 +100,7 @@ namespace Assets.Scripts.Logic
             _inputView.GetRotation -= GetRotation;
             _inputView.GetShootBullet -= GetShootBullet;
             _inputView.GetShootLaser -= GetShootLaser;
-            _shipView.ShipUpdate -= ShipUpdate;
+            _updateHandler.Update -= ShipUpdate;
             _shipView.CollisionEnter -= CollisionEnter;
         }
     }

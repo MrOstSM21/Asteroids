@@ -15,16 +15,18 @@ namespace Assets.Scripts.Logic
         private readonly Settings _settings;
         private readonly int _poolSize;
         private readonly GameView _gameView;
+        private readonly UpdateHandler _updateHandler;
 
         private List<Bullet> _bullets;
         private float _fireDelay;
 
-        public PoolBullets(Transform parentContainer, WeaponView weaponView, Settings settings, GameView gameView)
+        public PoolBullets(Transform parentContainer, WeaponView weaponView, Settings settings, GameView gameView,UpdateHandler updateHandler)
         {
             _parentContainer = parentContainer;
             _settings = settings;
             _weaponView = weaponView;
             _gameView = gameView;
+            _updateHandler = updateHandler;
             _poolSize = _settings.GetBulletPoolSize;
             _fireDelay = BULLET_DELAY;
             Init();
@@ -32,7 +34,7 @@ namespace Assets.Scripts.Logic
         private void AddBullet()
         {
             var tempBullet = Object.Instantiate(_weaponView);
-            var bullet = new Bullet(tempBullet, _settings, _gameView.GetMainCamera);
+            var bullet = new Bullet(tempBullet, _settings, _gameView.GetMainCamera,_updateHandler);
             bullet.GetTransform.SetParent(_parentContainer);
             _bullets.Add(bullet);
             bullet.GetTransform.gameObject.SetActive(false);
