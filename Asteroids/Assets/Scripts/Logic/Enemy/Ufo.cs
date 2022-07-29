@@ -14,13 +14,15 @@ namespace Assets.Scripts.Logic
         private readonly IMovement _movement;
         private readonly ICollisionHandler _collisionHandler;
         private readonly Dictionary<EnemyName, int> _enemyPoints;
+        private readonly UpdateHandler _updateHandler;
 
-        public Ufo(EnemyView enemyView, Settings settings, GameView gameView, Score score)
+        public Ufo(EnemyView enemyView, Settings settings, GameView gameView, Score score, UpdateHandler updateHandler)
         {
             _enemyView = enemyView;
             _settings = settings;
             _gameView = gameView;
             _score = score;
+            _updateHandler = updateHandler;
             _enemyPoints = _settings.GetEnemyPoints();
             _visibilityHandler = new VisibilityHandler(_enemyView.GetTransform);
             _movement = new MovementInTarget(_enemyView.GetTransform);
@@ -28,12 +30,12 @@ namespace Assets.Scripts.Logic
             Subscribe();
         }
 
-        public void Move() => _enemyView.SetMove += SetMove;
+        public void Move() => _updateHandler.Update += SetMove;
 
         public void LeftTheZone()
         {
-            _enemyView.Destroy();
             Unsubscribe();
+            _enemyView.Destroy();
         }
 
         private void SetMove()
@@ -53,8 +55,11 @@ namespace Assets.Scripts.Logic
             }
         }
 
-        private void GetDamage() => _score.AddPoint(_enemyPoints[EnemyName.Ufo]);
-
+        private void GetDamage()
+        {
+            _score.AddPoint(_enemyPoints[EnemyName.Ufo]);
+            Unsubscribe();
+        }
         private void Subscribe()
         {
             _enemyView.CollisionEnter += CollisionEnter;
@@ -64,7 +69,7 @@ namespace Assets.Scripts.Logic
         private void Unsubscribe()
         {
             _enemyView.CollisionEnter -= CollisionEnter;
-            _enemyView.SetMove -= SetMove;
+            _updateHandler.Update -= SetMove;
             _enemyView.GetDamage -= GetDamage;
         }
     }
