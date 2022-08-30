@@ -23,7 +23,7 @@ namespace Assets.Scripts.Logic
 
         private float _speed;
 
-        public Ship(GameView gameView, Settings settings,UpdateHandler updateHandler)
+        public Ship(GameView gameView, Settings settings, UpdateHandler updateHandler)
         {
             _updateHandler = updateHandler;
             _gameView = gameView;
@@ -34,7 +34,7 @@ namespace Assets.Scripts.Logic
             _movement = new ForwardMovement(_shipView.GetTransform);
             _inertiaHandler = new InertiaHandler(_shipView.GetTransform, _settings);
             _visibilityHandler = new VisibilityHandler(_shipView.GetTransform);
-            _poolBullets = new PoolBullets(gameView.GetContainerPoolBullet, _gameView.GetWeaponView, _settings, gameView,_updateHandler);
+            _poolBullets = new PoolBullets(gameView.GetContainerPoolBullet, _gameView.GetWeaponView, _settings, gameView, _updateHandler);
             _laser = new Laser(_shipView.GetAnimator);
             _collisionHandler = new CollisionHandlerWithEnemy();
             Subscribe();
@@ -56,8 +56,11 @@ namespace Assets.Scripts.Logic
 
         private void ShootBullet()
         {
-            IWeapon bullet = _poolBullets.GetBullet();
-            bullet?.Shoot(_gameView.GetWeaponSpawnPoint);
+            if (TimeController.GameIsStart)
+            {
+                IWeapon bullet = _poolBullets.GetBullet();
+                bullet?.Shoot(_gameView.GetWeaponSpawnPoint);
+            }
         }
         private void CollisionEnter(Collision2D collision)
         {

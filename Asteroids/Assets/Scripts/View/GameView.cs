@@ -24,7 +24,9 @@ namespace Assets.Scripts.View
         [SerializeField] private ShipIndicatorsView _shipIndicatorsView;
         [SerializeField] private ScoreView _scoreView;
         [SerializeField] private ScoreView _endScoreView;
+        [SerializeField] private ScoreView _bestScoreView;
         [SerializeField] private GameObject _endPanel;
+        [SerializeField] private GameObject _startPanel;
 
         public ShipView GetShipView => _shipView;
         public InputView GetInputView => _inputView;
@@ -36,7 +38,9 @@ namespace Assets.Scripts.View
         public ShipIndicatorsView GetShipIndicators => _shipIndicatorsView;
         public ScoreView GetScoreView => _scoreView;
         public ScoreView GetEndScoreView => _endScoreView;
+        public ScoreView GetBestScoreView => _bestScoreView;
         public GameObject GetEndPanel => _endPanel;
+        public GameObject GetStartPanel => _startPanel;
 
 
         public Dictionary<EnemyName, EnemyView> GetEnemysView() => new()
