@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Assets.Scripts.View
 {
     public class ShipIndicatorsView : MonoBehaviour
     {
-        [SerializeField] private Text _position;
-        [SerializeField] private Text _rotation;
-        [SerializeField] private Text _speed;
-        [SerializeField] private Text _laserAmmo;
+        [SerializeField] private TextMeshProUGUI _position;
+        [SerializeField] private TextMeshProUGUI _rotation;
+        [SerializeField] private TextMeshProUGUI _speed;
+        [SerializeField] private TextMeshProUGUI _laserAmmo;
         [SerializeField] private Image _progressBar;
 
         private void Start()
