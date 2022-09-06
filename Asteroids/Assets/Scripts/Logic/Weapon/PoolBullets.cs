@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.View;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -7,6 +8,8 @@ namespace Assets.Scripts.Logic
 {
     public class PoolBullets
     {
+        public event Action<Collision2D> GetEnemy;
+
         private const float BULLET_DELAY = 2f;
         private const float STEP_DELAY = 0.1f;
 
@@ -20,7 +23,7 @@ namespace Assets.Scripts.Logic
         private List<Bullet> _bullets;
         private float _fireDelay;
 
-        public PoolBullets(Transform parentContainer, WeaponView weaponView, Settings settings, GameView gameView,UpdateHandler updateHandler)
+        public PoolBullets(Transform parentContainer, WeaponView weaponView, Settings settings, GameView gameView, UpdateHandler updateHandler)
         {
             _parentContainer = parentContainer;
             _settings = settings;
@@ -34,7 +37,8 @@ namespace Assets.Scripts.Logic
         private void AddBullet()
         {
             var tempBullet = Object.Instantiate(_weaponView);
-            var bullet = new Bullet(tempBullet, _settings, _gameView.GetMainCamera,_updateHandler);
+            var bullet = new Bullet(tempBullet, _settings, _gameView.GetMainCamera, _updateHandler);
+            Subscribe(bullet);
             bullet.GetTransform.SetParent(_parentContainer);
             _bullets.Add(bullet);
             bullet.GetTransform.gameObject.SetActive(false);
@@ -72,5 +76,17 @@ namespace Assets.Scripts.Logic
 
             return null;
         }
+
+        public void Unsubscribe()
+        {
+            foreach (var bullet in _bullets)
+            {
+                bullet.GetEnemy -= GetDamagedEnemy;
+            }
+        }
+
+        private void GetDamagedEnemy(Collision2D collision) => GetEnemy?.Invoke(collision);
+
+        private void Subscribe(Bullet bullet) => bullet.GetEnemy += GetDamagedEnemy;
     }
 }

@@ -1,36 +1,29 @@
-﻿using Assets.Scripts.View;
+using Assets.Scripts.View;
 using UnityEngine;
 
 namespace Assets.Scripts.Logic
 {
-    class Ufo : Enemy
+
+    public class SpeedItem : Enemy
     {
         private readonly GameView _gameView;
         private readonly ICollisionHandler _collisionHandler;
 
-        public Ufo(EnemyView enemyView, Settings settings, GameView gameView, Score score, UpdateHandler updateHandler)
+        private int _hit = 1;
+
+        public SpeedItem(EnemyView enemyView, Settings settings, GameView gameView, Score score, UpdateHandler updateHandler)
             : base(settings, score, updateHandler)
         {
             _enemy = this;
-            _speed = _settings.GetUfoSpeed;
+            _speed = _settings.GetSpeedItemSpeed;
             _enemyView = enemyView;
             _gameView = gameView;
             _visibilityHandler = new VisibilityHandler(_enemyView.GetTransform);
             _movement = new MovementInTarget(_enemyView.GetTransform);
             _collisionHandler = new CollisionHandlerWithWeapon();
-            _enemyView.SetEnemyName(EnemyName.Ufo);
-            _enemyPoints = _settings.GetEnemyPoints()[EnemyName.Ufo];
+            _enemyView.SetEnemyName(EnemyName.SpeedItem);
+            _enemyPoints = _settings.GetEnemyPoints()[EnemyName.SpeedItem];
             Subscribe();
-        }
-
-        private void CollisionEnter(Collision2D collision)
-        {
-            var weapon = _collisionHandler.CheckCollision(collision);
-            if (weapon)
-            {
-                _enemyView.TakeDamage();
-                Unsubscribe();
-            }
         }
         public override void Subscribe()
         {
@@ -44,6 +37,28 @@ namespace Assets.Scripts.Logic
             _enemyView.CollisionEnter -= CollisionEnter;
             _updateHandler.Update -= Update;
             _enemyView.GetDamage -= GetDamage;
+        }
+
+        private void CollisionEnter(Collision2D collision)
+        {
+            var weapon = _collisionHandler.CheckCollision(collision);
+            if (weapon)
+            {
+                CheckHit();
+            }
+        }
+        private void CheckHit()
+        {
+            if (_hit > 0)
+            {
+                _speed += _settings.GetSpeedItemSpeedOffset;
+                _hit--;
+            }
+            else
+            {
+                _enemyView.TakeDamage();
+                Unsubscribe();
+            }
         }
         private void Update()
         {

@@ -20,6 +20,7 @@ namespace Assets.Scripts.Logic
         private readonly PoolBullets _poolBullets;
         private readonly IWeapon _laser;
         private readonly UpdateHandler _updateHandler;
+        private readonly HealthPointsHandler _healthPointsHandler;
 
         private float _speed;
 
@@ -37,6 +38,7 @@ namespace Assets.Scripts.Logic
             _poolBullets = new PoolBullets(gameView.GetContainerPoolBullet, _gameView.GetWeaponView, _settings, gameView, _updateHandler);
             _laser = new Laser(_shipView.GetAnimator);
             _collisionHandler = new CollisionHandlerWithEnemy();
+            _healthPointsHandler = new HealthPointsHandler(_settings.GetShipStartHp, _gameView.GetShipHealthPointView);
             Subscribe();
         }
 
@@ -67,8 +69,13 @@ namespace Assets.Scripts.Logic
             var enemy = _collisionHandler.CheckCollision(collision);
             if (enemy)
             {
-                EndGame?.Invoke();
-                Unsubscribe();
+                var point = _healthPointsHandler.DecreaseHP();
+                if (point <= 0)
+                {
+                    EndGame?.Invoke();
+                    _poolBullets.Unsubscribe();
+                    Unsubscribe();
+                }
             }
         }
         private void ShipUpdate()
@@ -87,6 +94,14 @@ namespace Assets.Scripts.Logic
 
         private void GetShootLaser() => _laser.Shoot(_gameView.GetWeaponSpawnPoint);
 
+        private void GetEnemyCollision(Collision2D collision)
+        {
+            var enemy = collision.gameObject.GetComponent<EnemyView>().EnemyName;
+            if (enemy == EnemyName.LifeItem)
+            {
+                _healthPointsHandler.AddHP();
+            }
+        }
         private void Subscribe()
         {
             _inputView.GetMovement += GetMovement;
@@ -95,6 +110,7 @@ namespace Assets.Scripts.Logic
             _inputView.GetShootLaser += GetShootLaser;
             _updateHandler.Update += ShipUpdate;
             _shipView.CollisionEnter += CollisionEnter;
+            _poolBullets.GetEnemy += GetEnemyCollision;
         }
 
         private void Unsubscribe()
@@ -105,6 +121,7 @@ namespace Assets.Scripts.Logic
             _inputView.GetShootLaser -= GetShootLaser;
             _updateHandler.Update -= ShipUpdate;
             _shipView.CollisionEnter -= CollisionEnter;
+            _poolBullets.GetEnemy -= GetEnemyCollision;
         }
     }
 }

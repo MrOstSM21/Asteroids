@@ -3,7 +3,7 @@
 namespace Assets.Scripts.Logic
 {
 
-    class VisibilityHandler
+    public class VisibilityHandler
     {
         private readonly Transform _transform;
 
@@ -44,7 +44,7 @@ namespace Assets.Scripts.Logic
                 }
             }
         }
-        public void CheckVisibilityEnemy(IEnemy enemy, float endZoneDistance)
+        public void CheckVisibilityEnemy(Enemy enemy, float endZoneDistance)
         {
             var position = _transform.position;
             if (position.x < -endZoneDistance || position.x > endZoneDistance || position.y < -endZoneDistance || position.y > endZoneDistance)
