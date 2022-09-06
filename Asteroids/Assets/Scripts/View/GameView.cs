@@ -5,7 +5,10 @@ public enum EnemyName
 {
     Asteroid,
     AsteroidPart,
-    Ufo
+    Ufo,
+    LifeItem,
+    PointsItem,
+    SpeedItem
 }
 namespace Assets.Scripts.View
 {
@@ -15,6 +18,9 @@ namespace Assets.Scripts.View
         [SerializeField] private EnemyView _asteroid;
         [SerializeField] private EnemyView _asteroidPart;
         [SerializeField] private EnemyView _ufo;
+        [SerializeField] private EnemyView _lifeItem;
+        [SerializeField] private EnemyView _pointsItem;
+        [SerializeField] private EnemyView _speedItem;
         [SerializeField] private InputView _inputView;
         [SerializeField] private Transform[] _spawnPointsView;
         [SerializeField] private Camera _maincamera;
@@ -27,6 +33,8 @@ namespace Assets.Scripts.View
         [SerializeField] private ScoreView _bestScoreView;
         [SerializeField] private GameObject _endPanel;
         [SerializeField] private GameObject _startPanel;
+        [SerializeField] private HealthPointView _shipHealthPointView;
+        
 
         public ShipView GetShipView => _shipView;
         public InputView GetInputView => _inputView;
@@ -41,6 +49,8 @@ namespace Assets.Scripts.View
         public ScoreView GetBestScoreView => _bestScoreView;
         public GameObject GetEndPanel => _endPanel;
         public GameObject GetStartPanel => _startPanel;
+        public HealthPointView GetShipHealthPointView => _shipHealthPointView;
+        
 
 
         public Dictionary<EnemyName, EnemyView> GetEnemysView() => new()
@@ -48,6 +58,9 @@ namespace Assets.Scripts.View
             { EnemyName.Asteroid, _asteroid },
             { EnemyName.AsteroidPart, _asteroidPart },
             { EnemyName.Ufo, _ufo },
+            { EnemyName.LifeItem, _lifeItem },
+            { EnemyName.PointsItem, _pointsItem },
+            { EnemyName.SpeedItem,_speedItem}
         };
     }
 }

@@ -1,46 +1,39 @@
 ﻿using Assets.Scripts.View;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.Logic
 {
-    public class AsteroidPart : IEnemy
+    public class AsteroidPart : Enemy
     {
-        private readonly EnemyView _enemyView;
-        private readonly Settings _settings;
-        private readonly Vector3 _direction;
-        private readonly VisibilityHandler _visibilityHandler;
-        private readonly Score _score;
-        private readonly IMovement _movement;
         private readonly ICollisionHandler _collisionHandler;
-        private readonly Dictionary<EnemyName, int> _enemyPoints;
-        private readonly UpdateHandler _updateHandler;
 
         public AsteroidPart(EnemyView enemyView, Settings settings, Vector3 direction, Score score, UpdateHandler updateHandler)
+            : base(settings, score, updateHandler)
         {
+            _enemy = this;
+            _speed = _settings.GetAsteroidPartSpeed;
             _enemyView = enemyView;
-            _settings = settings;
-            _score = score;
-            _updateHandler = updateHandler;
-            _enemyPoints = _settings.GetEnemyPoints();
-            _direction = direction - _enemyView.GetTransform.position;
+            _direction = (direction - _enemyView.GetTransform.position).normalized;
             _visibilityHandler = new VisibilityHandler(_enemyView.GetTransform);
             _movement = new ForwardMovement(_enemyView.GetTransform);
             _collisionHandler = new CollisionHandlerWithWeapon();
+            _enemyView.SetEnemyName(EnemyName.AsteroidPart);
+            _enemyPoints = _settings.GetEnemyPoints()[EnemyName.AsteroidPart];
             Subscribe();
         }
 
-        public void Move() => _updateHandler.Update += SetMove;
-        public void LeftTheZone()
+        public override void Subscribe()
         {
-            Unsubscribe();
-            _enemyView.Destroy();
+            _updateHandler.Update += Move;
+            _enemyView.CollisionEnter += CollisionEnter;
+            _enemyView.GetDamage += GetDamage;
         }
 
-        private void SetMove()
+        public override void Unsubscribe()
         {
-            _visibilityHandler.CheckVisibilityEnemy(this, _settings.GetEndZoneDistanse);
-            _movement.Move(_settings.GetAsteroidPartSpeed, _direction.normalized);
+            _enemyView.CollisionEnter -= CollisionEnter;
+            _updateHandler.Update -= Move;
+            _enemyView.GetDamage -= GetDamage;
         }
 
         private void CollisionEnter(Collision2D collision)
@@ -51,25 +44,6 @@ namespace Assets.Scripts.Logic
                 _enemyView.TakeDamage();
                 Unsubscribe();
             }
-        }
-
-        private void GetDamage()
-        {
-            _score.AddPoint(_enemyPoints[EnemyName.Ufo]);
-            Unsubscribe();
-        }
-
-        private void Subscribe()
-        {
-            _enemyView.CollisionEnter += CollisionEnter;
-            _enemyView.GetDamage += GetDamage;
-        }
-
-        private void Unsubscribe()
-        {
-            _enemyView.CollisionEnter -= CollisionEnter;
-            _updateHandler.Update -= SetMove;
-            _enemyView.GetDamage -= GetDamage;
         }
     }
 }

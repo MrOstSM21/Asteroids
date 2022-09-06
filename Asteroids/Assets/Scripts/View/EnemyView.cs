@@ -10,10 +10,11 @@ namespace Assets.Scripts.View
         public event Action GetDamage;
 
         public Transform GetTransform => _transform;
+        public EnemyName EnemyName { get; private set; }
 
         [SerializeField] private Transform _transform;
 
-
+        
         private void OnCollisionEnter2D(Collision2D collision)
         {
             CollisionEnter?.Invoke(collision);
@@ -26,5 +27,6 @@ namespace Assets.Scripts.View
             GetDamage?.Invoke();
             Destroy();
         }
+        public void SetEnemyName(EnemyName enemyName) => EnemyName = enemyName;
     }
 }

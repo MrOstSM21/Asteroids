@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.View;
+using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Logic
@@ -6,6 +7,7 @@ namespace Assets.Scripts.Logic
 
     public class Bullet : IWeapon
     {
+        public event Action<Collision2D> GetEnemy;
         public Transform GetTransform => _weaponView.GetTransform;
 
         private readonly WeaponView _weaponView;
@@ -60,6 +62,7 @@ namespace Assets.Scripts.Logic
             var enemy = _collisionHandler.CheckCollision(collision);
             if (enemy)
             {
+                GetEnemy?.Invoke(collision);
                 ReturnInPool();
             }
         }

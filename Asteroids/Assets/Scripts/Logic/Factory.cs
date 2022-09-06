@@ -21,9 +21,9 @@ namespace Assets.Scripts.Logic
             _enemyView = _gameView.GetEnemysView();
         }
 
-        public IEnemy Create(EnemyName enemyName, Vector3 position, Vector3 direction, Score score)
+        public Enemy Create(EnemyName enemyName, Vector3 position, Vector3 direction, Score score)
         {
-            IEnemy enemy = null;
+            Enemy enemy = null;
             switch (enemyName)
             {
                 case EnemyName.Asteroid:
@@ -37,6 +37,18 @@ namespace Assets.Scripts.Logic
                 case EnemyName.Ufo:
                     var ufoPrefab = Object.Instantiate(_enemyView[EnemyName.Ufo], position, Quaternion.identity);
                     enemy = new Ufo(ufoPrefab, _settings, _gameView, score,_updateHandler);
+                    break;
+                case EnemyName.LifeItem:
+                    var lifeItemPrefab = Object.Instantiate(_enemyView[EnemyName.LifeItem], position, Quaternion.identity);
+                    enemy = new LifeItem(lifeItemPrefab, _settings, direction, score, _updateHandler);
+                    break;
+                case EnemyName.PointsItem:
+                    var pointsItemPrefab = Object.Instantiate(_enemyView[EnemyName.PointsItem], position, Quaternion.identity);
+                    enemy = new PointsItem(pointsItemPrefab, _settings, direction, score, _updateHandler);
+                    break;
+                case EnemyName.SpeedItem:
+                    var speedPrefab = Object.Instantiate(_enemyView[EnemyName.SpeedItem], position, Quaternion.identity);
+                    enemy = new SpeedItem(speedPrefab, _settings, _gameView, score, _updateHandler);
                     break;
                 default:
                     break;
