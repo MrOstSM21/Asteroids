@@ -8,10 +8,11 @@ namespace Assets.Scripts.Logic
         private readonly GameView _gameView;
         private readonly ICollisionHandler _collisionHandler;
 
-        public Ufo(EnemyView enemyView, Settings settings, GameView gameView, Score score, UpdateHandler updateHandler)
-            : base(settings, score, updateHandler)
+        public Ufo(EnemyView enemyView, Settings settings, GameView gameView, Score score, UpdateHandler updateHandler,SoundHandler soundHandler)
+            : base(settings, score, updateHandler, soundHandler)
         {
             _enemy = this;
+            _explosiveSound = SoundName.Explosion;
             _speed = _settings.GetUfoSpeed;
             _enemyView = enemyView;
             _gameView = gameView;
@@ -28,6 +29,7 @@ namespace Assets.Scripts.Logic
             var weapon = _collisionHandler.CheckCollision(collision);
             if (weapon)
             {
+                PlayDestroySound();
                 _enemyView.TakeDamage();
                 Unsubscribe();
             }

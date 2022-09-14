@@ -14,11 +14,14 @@ public class SaveHandler
         _binaryFormatter = new BinaryFormatter();
     }
 
-    public void Save(int points)
+    public void Save(int points,int lang,bool music,bool sound)
     {
         var file = File.Create(_path);
         var data = new SaveData();
         data._score = points;
+        data._lang = lang;
+        data._music = music;
+        data._sound = sound;
         _binaryFormatter.Serialize(file, data);
         file.Close();
     }
@@ -40,9 +43,15 @@ public class SaveHandler
 public class SaveData
 {
     public int _score;
+    public int _lang;
+    public bool _music;
+    public bool _sound;
     public SaveData()
     {
         _score = 0;
+        _lang = 0;
+        _music = true;
+        _music = false;
     }
 }
 

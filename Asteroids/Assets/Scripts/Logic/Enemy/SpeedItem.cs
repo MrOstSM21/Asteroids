@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Assets.Scripts.Logic
 {
-
     public class SpeedItem : Enemy
     {
         private readonly GameView _gameView;
@@ -11,10 +10,11 @@ namespace Assets.Scripts.Logic
 
         private int _hit = 1;
 
-        public SpeedItem(EnemyView enemyView, Settings settings, GameView gameView, Score score, UpdateHandler updateHandler)
-            : base(settings, score, updateHandler)
+        public SpeedItem(EnemyView enemyView, Settings settings, GameView gameView, Score score, UpdateHandler updateHandler,SoundHandler soundHandler)
+            : base(settings, score, updateHandler, soundHandler)
         {
             _enemy = this;
+            _explosiveSound = SoundName.Explosion;
             _speed = _settings.GetSpeedItemSpeed;
             _enemyView = enemyView;
             _gameView = gameView;
@@ -56,6 +56,7 @@ namespace Assets.Scripts.Logic
             }
             else
             {
+                PlayDestroySound();
                 _enemyView.TakeDamage();
                 Unsubscribe();
             }

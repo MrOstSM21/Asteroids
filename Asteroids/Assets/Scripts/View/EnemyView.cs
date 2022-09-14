@@ -14,13 +14,19 @@ namespace Assets.Scripts.View
 
         [SerializeField] private Transform _transform;
 
-        
+
+
+
+
         private void OnCollisionEnter2D(Collision2D collision)
         {
             CollisionEnter?.Invoke(collision);
         }
 
-        public void Destroy() => Destroy(gameObject);
+        public void Destroy()
+        {
+            Destroy(gameObject);
+        }
 
         public void TakeDamage()
         {
@@ -28,5 +34,6 @@ namespace Assets.Scripts.View
             Destroy();
         }
         public void SetEnemyName(EnemyName enemyName) => EnemyName = enemyName;
+
     }
 }

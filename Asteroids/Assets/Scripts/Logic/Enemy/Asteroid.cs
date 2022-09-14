@@ -9,10 +9,11 @@ namespace Assets.Scripts.Logic
         private readonly GameView _gameView;
         private readonly ICollisionHandler _collisionHandler;
 
-        public Asteroid(EnemyView enemyView, Settings settings, Vector3 direction, GameView gameView, Score score, UpdateHandler updateHandler)
-            : base(settings, score, updateHandler)
+        public Asteroid(EnemyView enemyView, Settings settings, Vector3 direction, GameView gameView, Score score,UpdateHandler updateHandler,SoundHandler soundHandler)
+            : base(settings, score, updateHandler,soundHandler)
         {
             _enemy = this;
+            _explosiveSound = SoundName.Explosion;
             _speed = _settings.GetAsteroidSpeed;
             _enemyView = enemyView;
             _gameView = gameView;
@@ -32,7 +33,9 @@ namespace Assets.Scripts.Logic
             if (weapon)
             {
                 CreateParts();
+                PlayDestroySound();
                 _enemyView.TakeDamage();
+
                 Unsubscribe();
             }
         }
@@ -55,7 +58,7 @@ namespace Assets.Scripts.Logic
             for (int count = 0; count < 3; count++)
             {
                 var direction = new Vector3(Random.Range(-360f, 360f), Random.Range(-360f, 360f), 0f);
-                var factory = new Factory(_settings, _gameView, _updateHandler);
+                var factory = new Factory(_settings, _gameView, _updateHandler,_soundHandler);
                 factory.Create(EnemyName.AsteroidPart, _enemyView.GetTransform.position, direction, _score);
             }
         }

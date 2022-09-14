@@ -34,6 +34,7 @@ namespace Assets.Scripts.View
         [SerializeField] private GameObject _endPanel;
         [SerializeField] private GameObject _startPanel;
         [SerializeField] private HealthPointView _shipHealthPointView;
+        [SerializeField] private TranslateView _translateView;
         
 
         public ShipView GetShipView => _shipView;
@@ -50,6 +51,7 @@ namespace Assets.Scripts.View
         public GameObject GetEndPanel => _endPanel;
         public GameObject GetStartPanel => _startPanel;
         public HealthPointView GetShipHealthPointView => _shipHealthPointView;
+        public TranslateView GetTranslateView => _translateView;
         
 
 
