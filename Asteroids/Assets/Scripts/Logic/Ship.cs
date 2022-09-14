@@ -6,7 +6,9 @@ namespace Assets.Scripts.Logic
 {
     public class Ship
     {
-        public event Action EndGame;
+        public event Action ShipDestroy;
+
+        public bool ActiveBonusHealth { get; private set; }
 
         private readonly ShipView _shipView;
         private readonly Settings _settings;
@@ -21,11 +23,15 @@ namespace Assets.Scripts.Logic
         private readonly IWeapon _laser;
         private readonly UpdateHandler _updateHandler;
         private readonly HealthPointsHandler _healthPointsHandler;
+        private readonly SoundHandler _soundHandler;
 
         private float _speed;
 
-        public Ship(GameView gameView, Settings settings, UpdateHandler updateHandler)
+
+        public Ship(GameView gameView, Settings settings, UpdateHandler updateHandler,SoundHandler soundHandler)
         {
+            ActiveBonusHealth = false;
+            _soundHandler = soundHandler;
             _updateHandler = updateHandler;
             _gameView = gameView;
             _shipView = _gameView.GetShipView;
@@ -42,6 +48,11 @@ namespace Assets.Scripts.Logic
             Subscribe();
         }
 
+        public void AddBonusHealth()
+        {
+            ActiveBonusHealth = true;
+            _healthPointsHandler.AddHP();
+        }
         private void Move(float movement)
         {
             _visibilityHandler.CheckVisibilityPlayerObjects(this, _gameView.GetMainCamera);
@@ -61,7 +72,12 @@ namespace Assets.Scripts.Logic
             if (TimeController.GameIsStart)
             {
                 IWeapon bullet = _poolBullets.GetBullet();
-                bullet?.Shoot(_gameView.GetWeaponSpawnPoint);
+                if (bullet!=null)
+                {
+                    bullet.Shoot(_gameView.GetWeaponSpawnPoint);
+                    _soundHandler.PlaySound(SoundName.Fire);
+                }
+               
             }
         }
         private void CollisionEnter(Collision2D collision)
@@ -72,11 +88,15 @@ namespace Assets.Scripts.Logic
                 var point = _healthPointsHandler.DecreaseHP();
                 if (point <= 0)
                 {
-                    EndGame?.Invoke();
-                    _poolBullets.Unsubscribe();
-                    Unsubscribe();
+                    ShipDestroy?.Invoke();
+
                 }
             }
+        }
+        private void FinishGame()
+        {
+            _poolBullets.Unsubscribe();
+            Unsubscribe();
         }
         private void ShipUpdate()
         {
@@ -92,7 +112,11 @@ namespace Assets.Scripts.Logic
 
         private void GetShootBullet() => ShootBullet();
 
-        private void GetShootLaser() => _laser.Shoot(_gameView.GetWeaponSpawnPoint);
+        private void GetShootLaser()
+        {
+            _laser.Shoot(_gameView.GetWeaponSpawnPoint);
+            _soundHandler.PlaySound(SoundName.Laser);
+        }
 
         private void GetEnemyCollision(Collision2D collision)
         {
@@ -102,6 +126,7 @@ namespace Assets.Scripts.Logic
                 _healthPointsHandler.AddHP();
             }
         }
+       
         private void Subscribe()
         {
             _inputView.GetMovement += GetMovement;
@@ -109,6 +134,7 @@ namespace Assets.Scripts.Logic
             _inputView.GetShootBullet += GetShootBullet;
             _inputView.GetShootLaser += GetShootLaser;
             _updateHandler.Update += ShipUpdate;
+            _updateHandler.EndGame += FinishGame;
             _shipView.CollisionEnter += CollisionEnter;
             _poolBullets.GetEnemy += GetEnemyCollision;
         }
@@ -120,6 +146,7 @@ namespace Assets.Scripts.Logic
             _inputView.GetShootBullet -= GetShootBullet;
             _inputView.GetShootLaser -= GetShootLaser;
             _updateHandler.Update -= ShipUpdate;
+            _updateHandler.EndGame -= FinishGame;
             _shipView.CollisionEnter -= CollisionEnter;
             _poolBullets.GetEnemy -= GetEnemyCollision;
         }

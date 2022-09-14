@@ -6,10 +6,11 @@ namespace Assets.Scripts.Logic
     public class LifeItem : Enemy
     {
         private readonly ICollisionHandler _collisionHandler;
-        public LifeItem(EnemyView enemyView, Settings settings, Vector3 direction, Score score, UpdateHandler updateHandler)
-            : base(settings, score, updateHandler)
+        public LifeItem(EnemyView enemyView, Settings settings, Vector3 direction, Score score, UpdateHandler updateHandler,SoundHandler soundHandler)
+            : base(settings, score, updateHandler,soundHandler)
         {
             _enemy = this;
+            _explosiveSound = SoundName.Explosion;
             _speed = _settings.GetLifeItemSpeed;
             _enemyView = enemyView;
             _movement = new ForwardMovement(_enemyView.GetTransform);
@@ -39,6 +40,7 @@ namespace Assets.Scripts.Logic
             var weapon = _collisionHandler.CheckCollision(collision);
             if (weapon)
             {
+                PlayDestroySound();
                 _enemyView.TakeDamage();
                 Unsubscribe();
             }

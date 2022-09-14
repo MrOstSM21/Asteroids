@@ -1,4 +1,5 @@
 using Assets.Scripts.Logic;
+using System;
 using UnityEngine;
 
 public class TimeController
@@ -18,5 +19,15 @@ public class TimeController
     {
         GameIsStart = true;
     }
+    private void Subscribe()
+    {
+        _updateHandler.StartGameActions += StartGameActions;
+        _updateHandler.EndGame += Unsubscribe;
+    }
 
+    private void Unsubscribe()
+    {
+        _updateHandler.StartGameActions -= StartGameActions;
+        _updateHandler.EndGame -= Unsubscribe;
+    }
 }

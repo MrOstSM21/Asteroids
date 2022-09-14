@@ -7,10 +7,11 @@ namespace Assets.Scripts.Logic
     {
         private readonly ICollisionHandler _collisionHandler;
 
-        public AsteroidPart(EnemyView enemyView, Settings settings, Vector3 direction, Score score, UpdateHandler updateHandler)
-            : base(settings, score, updateHandler)
+        public AsteroidPart(EnemyView enemyView, Settings settings, Vector3 direction, Score score, UpdateHandler updateHandler, SoundHandler soundHandler)
+            : base(settings, score, updateHandler,soundHandler)
         {
             _enemy = this;
+            _explosiveSound = SoundName.Explosion;
             _speed = _settings.GetAsteroidPartSpeed;
             _enemyView = enemyView;
             _direction = (direction - _enemyView.GetTransform.position).normalized;
@@ -41,6 +42,7 @@ namespace Assets.Scripts.Logic
             var weapon = _collisionHandler.CheckCollision(collision);
             if (weapon)
             {
+                PlayDestroySound();
                 _enemyView.TakeDamage();
                 Unsubscribe();
             }
