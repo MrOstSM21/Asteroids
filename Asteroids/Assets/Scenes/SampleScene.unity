@@ -5110,7 +5110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shipView: {fileID: 1133527369}
-  _asteroid: {fileID: 8575187194171363543, guid: 5f98c545f59ef1e4ebe686793d8ce119, type: 3}
+  _asteroid: {fileID: 2588967619470378205, guid: 61169d17dc99d9f46b529f45b8764812, type: 3}
   _asteroidPart: {fileID: 2895741122734363101, guid: 4553339b9445f1746893a679be75665c, type: 3}
   _ufo: {fileID: 5961156193491020655, guid: 6a862f3fbf456e44692d4ad0c971e6a7, type: 3}
   _lifeItem: {fileID: 5280456440326260046, guid: 7236ec6c8dbd31e46b3f96df81557524, type: 3}
